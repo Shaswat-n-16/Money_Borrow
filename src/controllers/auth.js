@@ -1,12 +1,6 @@
-// controllers/signup.js
 import { User } from "../db/schema/User.js";
-import { comparePassword, hashPassword } from "../utils/auth.utils.js";
-import {
-  generateResetToken,
-  generateToken,
-  verifyAuthToken,
-  verifyResetToken,
-} from "../utils/token.js";
+import { comparePassword } from "../utils/auth.utils.js";
+import { generateToken } from "../utils/token.js";
 import { validationResult } from "express-validator";
 
 export const signup = async (req, res) => {
@@ -51,7 +45,7 @@ export const signup = async (req, res) => {
 
   try {
     await createdUser.save();
-    res.send({ message: "User registered successfully." });
+    res.status(200).send({ message: "User registered successfully." });
   } catch (err) {
     res.status(500).send({ error: "Error registering user." });
   }
@@ -85,7 +79,7 @@ export const login = async (req, res, next) => {
         data: errors.array(),
       });
     }
-    // validate this data
+
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     //check user
